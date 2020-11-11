@@ -3,7 +3,7 @@ use std::net::TcpListener;
 use std::sync::mpsc;
 use std::thread;
 
-const LOCAL: &str = "0.0.0.0:7878";
+const LOCAL: &str = "127.0.0.1:7878";
 const MSG_SIZE: usize = 1024;
 
 fn sleep() {
